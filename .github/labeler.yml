@@ -1,42 +1,34 @@
-# Label when GameScene or game logic files are modified
 game:
-  - GameScene.swift
-  - Sources/**/GameScene.swift
-  - **/Game*.swift
+  - "GameScene.swift"
+  - "Sources/**/GameScene.swift"
+  - "**/Game*.swift"
 
-# Label when UI files (like labels, nodes) are modified
 ui:
-  - **/*Label*.swift
-  - **/*Node*.swift
+  - "**/*Label*.swift"
+  - "**/*Node*.swift"
 
-# Label when GameKit or Game Center logic is touched
 gamekit:
-  - **/*GameKit*.swift
-  - **/*GK*.swift
-  - **/*GameCenter*.swift
+  - "**/*GameKit*.swift"
+  - "**/*GK*.swift"
+  - "**/*GameCenter*.swift"
 
-# Label for configuration or GitHub Actions files
 ci:
-  - .github/**/*.yml
-  - .github/**/*.yaml
+  - ".github/**/*.yml"
+  - ".github/**/*.yaml"
 
-# Label for Swift source files in general
 swift:
-  - '**/*.swift'
+  - "**/*.swift"
 
-# Label for assets or resources
 assets:
-  - Assets.xcassets/**
-  - Resources/**
+  - "Assets.xcassets/**"
+  - "Resources/**"
 
-# Label for documentation updates
 documentation:
-  - '**/*.md'
-  - '**/*.markdown'
-  - '**/README*'
-  - '**/LICENSE*'
-  - docs/**
+  - "**/*.md"
+  - "**/*.markdown"
+  - "**/README*"
+  - "**/LICENSE*"
+  - "docs/**"
 
-# Fallback label for any other changes not covered
 misc:
-  - '*'
+  - "*"
