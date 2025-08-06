@@ -9,7 +9,7 @@ class GameScene: SKScene {
     var scoreLabel: SKLabelNode!
     var score: Int = 0 {
         didSet {
-            scoreLabel.text = "Score: \(score)"
+            scoreLabel?.text = "Score: \(score)"
         }
     }
     var bullet: SKSpriteNode!
