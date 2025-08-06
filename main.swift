@@ -14,5 +14,10 @@ class GameScene: SKScene {
     var bullet: SKSpriteNode?
     var invaders: [SKSpriteNode] = []
 
+    let playerSpeed: CGFloat = 30.0
+    let bulletSpeed: CGFloat = 10.0
+    let invaderSpeed: CGFloat = 2.0
+    var bulletState: String = "ready"
     
+        
 }
