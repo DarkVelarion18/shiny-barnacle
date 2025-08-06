@@ -1,3 +1,4 @@
+
 # Label PRs based on file paths, branch names, or targets
 
 game:
@@ -57,3 +58,4 @@ feature:
 # Optional: Label when PR targets `main` (for releases or production code)
 release:
   - base-branch: 'main'
+
