@@ -1,34 +1,61 @@
+
+# Label PRs based on file paths, branch names, or targets
+
 game:
-  - "GameScene.swift"
-  - "Sources/**/GameScene.swift"
-  - "**/Game*.swift"
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'GameScene.swift'
+          - 'Sources/**/GameScene.swift'
+          - '**/Game*.swift'
 
 ui:
-  - "**/*Label*.swift"
-  - "**/*Node*.swift"
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*Label*.swift'
+          - '**/*Node*.swift'
 
 gamekit:
-  - "**/*GameKit*.swift"
-  - "**/*GK*.swift"
-  - "**/*GameCenter*.swift"
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*GameKit*.swift'
+          - '**/*GK*.swift'
+          - '**/*GameCenter*.swift'
 
 ci:
-  - ".github/**/*.yml"
-  - ".github/**/*.yaml"
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/**/*.yml'
+          - '.github/**/*.yaml'
 
 swift:
-  - "**/*.swift"
+  - changed-files:
+      - any-glob-to-any-file: '**/*.swift'
 
 assets:
-  - "Assets.xcassets/**"
-  - "Resources/**"
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'Assets.xcassets/**'
+          - 'Resources/**'
 
 documentation:
-  - "**/*.md"
-  - "**/*.markdown"
-  - "**/README*"
-  - "**/LICENSE*"
-  - "docs/**"
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - '**/*.markdown'
+          - '**/README*'
+          - '**/LICENSE*'
+          - 'docs/**'
 
+# Generic fallback label for any PR that changes anything at all
 misc:
-  - "*"
+  - changed-files:
+      - any-glob-to-any-file: '**'
+
+# Optional: Label based on branch naming (e.g. `feature/something`)
+feature:
+  - head-branch: ['^feature', 'feature']
+
+# Optional: Label when PR targets `main` (for releases or production code)
+release:
+  - base-branch: 'main'
+
