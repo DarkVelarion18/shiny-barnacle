@@ -1,6 +1,5 @@
 import SpriteKit
 import GameplayKit
-import Foundation
 import GameKit
 
 class GameScene: SKScene {
