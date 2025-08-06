@@ -12,7 +12,7 @@ class GameScene: SKScene {
             scoreLabel?.text = "Score: \(score)"
         }
     }
-    var bullet: SKSpriteNode!
+    var bullet: SKSpriteNode?
     var invaders: [SKSpriteNode] = []
 
     
