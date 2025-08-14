@@ -60,8 +60,9 @@ class GameScene: SKScene {
     }
     
     func moveLeft() {
-        let newPosition = player.position.x - playerSpeed
-        player.position.x = max(newPosition, -290)
+        guard let player = player else { return }
+        let newX = max(player.position.x - playerSpeed, -290)
+        player.position.x = newX
     }
     
     func moveRight() {
