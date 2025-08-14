@@ -18,24 +18,28 @@ export default function Index() {
   const [heroPost, ...morePosts] = allPosts;
 
   return (
-    <>
-      {heroPost ? (
-        <>
-          <HeroPost
-            title={heroPost.title}
-            coverImage={heroPost.coverImage}
-            date={heroPost.date}
-            author={heroPost.author}
-            slug={heroPost.slug}
-            excerpt={heroPost.excerpt}
-          />
-          {morePosts.length > 0 && <MoreStories posts={morePosts} />}
-        </>
-      ) : (
-        <p className="text-center text-neutral-500">No posts yet.</p>
-      )}
-    </>
+    <main>
+      <Container>
+        <Intro />
+        {heroPost ? (
+          <>
+            <HeroPost
+              title={heroPost.title}
+              coverImage={heroPost.coverImage}
+              date={heroPost.date}
+              author={heroPost.author}
+              slug={heroPost.slug}
+              excerpt={heroPost.excerpt}
+            />
+            {morePosts.length > 0 && <MoreStories posts={morePosts} />}
+          </>
+        ) : (
+          <p className="text-center text-neutral-500">No posts yet.</p>
+        )}
+      </Container>
+    </main>
   );
+}
 }
 
   return (
