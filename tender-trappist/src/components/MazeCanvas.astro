@@ -1,0 +1,105 @@
+---
+import type { ShowMessageFunction, IsSolvingRef } from '../types/maze';
+import { Maze } from '../utils/Maze.ts';
+import { Player } from '../utils/Player';
+import { MazeRenderer } from '../utils/MazeRenderer';
+
+interface Props {
+  mazeSize: number;
+  onInit: (
+    maze: Maze,
+    player: Player,
+    renderer: MazeRenderer,
+    showMessage: ShowMessageFunction,
+    isSolvingRef: IsSolvingRef
+  ) => void;
+  onPlayerMove: (
+    maze: Maze,
+    player: Player,
+    renderer: MazeRenderer
+  ) => void;
+  showMessage: ShowMessageFunction;
+}
+
+const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
+---
+
+<canvas id="mazeCanvas"></canvas>
+
+<script type="module" lang="ts">
+  import {
+    Maze,
+    Player,
+    CELL_SIZE,
+    
+  } from '../utils/Maze';
+
+  
+  /**
+   * @typedef {Object} ComponentProps
+   * @property {number} mazeSize
+   * @property {(maze: Maze, player: Player, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, showMessage: (msg: string, duration?: number) => void, isSolvingRef: { current: boolean }) => void} onInit
+   * @property {(maze: Maze, player: Player, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void} onPlayerMove
+   * @property {(msg: string, duration?: number) => void} showMessage
+   */
+
+  
+  const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
+
+  const canvas = document.getElementById('mazeCanvas');
+  if (!(canvas instanceof HTMLCanvasElement)) {
+    throw new Error('Element with id "mazeCanvas" is not a canvas.');
+  }
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('Could not get 2D context from canvas.');
+  }
+
+  function initializeGame(size) {
+  isSolvingRef.current = false;
+
+  canvas.width = size * CELL_SIZE;
+  canvas.height = size * CELL_SIZE;
+
+  maze = new Maze(size, size);
+  player = new Player(0, 0);
+
+  drawGame();
+  onInit(maze, player, ctx, canvas, showMessage, isSolvingRef);
+}
+
+  let maze, player;
+
+  ({ maze, player } = initializeGame(
+    mazeSize,
+    canvas,
+    ctx,
+    onInit,
+    showMessage,
+    isSolvingRef,
+    drawGame
+  ));
+
+setupKeyboardControls(maze, player, drawGame, onPlayerMove, isSolvingRef, canvas, ctx);
+
+  
+  initializeGame(mazeSize);
+
+    window.mazeFunctions = {
+    generateMaze,
+    };
+</script>
+
+<style>
+  canvas {
+      background-color: #ffffff;
+      border: 2px solid #334155; 
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      touch-action: none; 
+      max-width: 90vw; 
+      max-height: 70vh; 
+      width: auto;
+      height: auto;
+  }
+</style>
