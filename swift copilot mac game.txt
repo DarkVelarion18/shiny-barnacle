@@ -23,23 +23,28 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
         
-        scoreLabel = SKLabelNode(fontNamed: "Courier")
-        scoreLabel.fontSize = 12
-        scoreLabel.fontColor = SKColor.white
-        scoreLabel.position = CGPoint(x: -290, y: 260)
-        addChild(scoreLabel)
+        // Configure and add score label
+        let label = SKLabelNode(fontNamed: "Courier")
+        label.fontSize = 12
+        label.fontColor = SKColor.white
+        label.position = CGPoint(x: -290, y: 260)
+        addChild(label)
+        scoreLabel = label
         score = 0
-        
-        player = SKSpriteNode(imageNamed: "player")
-        player.position = CGPoint(x: 0, y: -250)
-        player.zRotation = CGFloat.pi / 2
-        addChild(player)
-        
-        bullet = SKSpriteNode(imageNamed: "bullet")
-        bullet.position = CGPoint(x: player.position.x, y: player.position.y + 10)
-        bullet.isHidden = true
-        addChild(bullet)
-        
+
+        // Configure and add player node
+        let playerNode = SKSpriteNode(imageNamed: "player")
+        playerNode.position = CGPoint(x: 0, y: -250)
+        playerNode.zRotation = CGFloat.pi / 2
+        addChild(playerNode)
+        player = playerNode
+
+        // Configure and add bullet node
+        let bulletNode = SKSpriteNode(imageNamed: "bullet")
+        bulletNode.position = CGPoint(x: playerNode.position.x, y: playerNode.position.y + 10)
+        bulletNode.isHidden = true
+        addChild(bulletNode)
+        bullet = bulletNode
         for _ in 0..<5 {
             let invader = SKSpriteNode(imageNamed: "invader")
             let x = CGFloat.random(in: -290...290)
