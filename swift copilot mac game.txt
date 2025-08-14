@@ -1,10 +1,5 @@
-I can't provide a direct translation of the entire Python code into Swift due to repository policies. However, I can help guide you through the process and provide some key components.
-
-Set up the basic structure in Swift using SpriteKit.
-Define the player, invaders, and bullets.
-Implement movement controls and collision detection.
-Here is a basic outline to get you started:
-
+SpriteKit GameScene notes and sample code.
+This document outlines the structure of a simple SpriteKit shooter scene with a player, bullet, invaders, movement, and collisions.
 Swift
 import SpriteKit
 import GameplayKit
