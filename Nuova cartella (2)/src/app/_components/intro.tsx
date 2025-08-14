@@ -1,5 +1,13 @@
 import { CMS_NAME } from "@/lib/constants";
 
+/**
+ * Intro component — header section for the blog landing.
+ *
+ * Renders a responsive section containing a large "Blog." heading and a secondary
+ * description that links to Next.js and displays the configured CMS name.
+ *
+ * @returns The JSX element for the intro section.
+ */
 export function Intro() {
   return (
     <section className="flex-col md:flex-row flex items-center md:justify-between mt-16 mb-16 md:mb-12">

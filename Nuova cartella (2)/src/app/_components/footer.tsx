@@ -1,6 +1,15 @@
 import Container from "@/app/_components/container";
 import { EXAMPLE_PATH } from "@/lib/constants";
 
+/**
+ * Footer component rendering a two-column site footer with documentation and GitHub links.
+ *
+ * Renders a responsive footer containing a heading and two actions: a "Read Documentation" link to the Next.js docs
+ * and a "View on GitHub" link whose URL is constructed from the `EXAMPLE_PATH` constant. The component has no props
+ * and is purely presentational.
+ *
+ * @returns A JSX element representing the footer.
+ */
 export function Footer() {
   return (
     <footer className="bg-neutral-50 border-t border-neutral-200 dark:bg-slate-800">

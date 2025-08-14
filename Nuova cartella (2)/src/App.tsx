@@ -3,6 +3,15 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+/**
+ * Root React component that renders Vite and React logos, a title, and an interactive card.
+ *
+ * The component manages an internal numeric `count` state initialized to 0. The card contains
+ * a button that increments `count` using a functional updater and displays its current value,
+ * plus a short hint about editing the source to test HMR. Logos link to the Vite and React docs.
+ *
+ * @returns The component's JSX to be rendered.
+ */
 function App() {
   const [count, setCount] = useState(0)
 

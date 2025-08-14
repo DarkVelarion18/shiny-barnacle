@@ -11,6 +11,18 @@ type Props = {
   author: Author;
 };
 
+/**
+ * Renders the header for a blog post: title, responsive author avatar, cover image, and formatted date.
+ *
+ * The avatar is shown in two responsive places (hidden on small screens / shown on small screens)
+ * so layout adapts across breakpoints.
+ *
+ * @param title - Post title displayed by PostTitle and used as the cover image alt/title.
+ * @param coverImage - URL or src for the cover image.
+ * @param date - ISO date string passed to DateFormatter.
+ * @param author - Author metadata (name and picture) used by Avatar.
+ * @returns A JSX fragment containing the composed post header.
+ */
 export function PostHeader({ title, coverImage, date, author }: Props) {
   return (
     <>

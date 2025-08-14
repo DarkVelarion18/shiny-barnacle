@@ -5,6 +5,12 @@ type Props = {
   posts: Post[];
 };
 
+/**
+ * Renders a "More Stories" section containing a responsive grid of post previews.
+ *
+ * @param posts - Array of Post objects to render as individual PostPreview items.
+ * @returns A section element with a header and a responsive grid of PostPreview components.
+ */
 export function MoreStories({ posts }: Props) {
   return (
     <section>

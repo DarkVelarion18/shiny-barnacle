@@ -13,6 +13,15 @@ type Props = {
   slug: string;
 };
 
+/**
+ * Render a preview card for a blog post.
+ *
+ * Displays the cover image, a linked title (to `/posts/{slug}`), the formatted date,
+ * an excerpt, and the author's avatar.
+ *
+ * @param slug - URL-friendly post identifier used to build the post link and passed to CoverImage
+ * @returns A JSX element containing the post preview layout
+ */
 export function PostPreview({
   title,
   coverImage,

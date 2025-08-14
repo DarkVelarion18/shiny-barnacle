@@ -13,6 +13,21 @@ type Props = {
   slug: string;
 };
 
+/**
+ * Renders a hero-style post preview with cover image, linked title, date, excerpt, and author avatar.
+ *
+ * The component lays out a large cover image followed by a two-column content area:
+ * the left column shows a linked post title and formatted date; the right column shows
+ * the excerpt and the author's avatar.
+ *
+ * @param title - The post title shown as the main heading and link text.
+ * @param coverImage - Source URL for the cover image (passed to CoverImage).
+ * @param date - ISO date string rendered by DateFormatter.
+ * @param excerpt - Short HTML-free summary shown beneath the title.
+ * @param author - Author object; at minimum `author.name` and `author.picture` are used for the Avatar.
+ * @param slug - Post slug used to build the link URL (`/posts/{slug}`) and passed to CoverImage.
+ * @returns A JSX element representing the hero post section.
+ */
 export function HeroPost({
   title,
   coverImage,

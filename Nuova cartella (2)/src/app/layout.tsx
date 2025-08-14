@@ -17,6 +17,16 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root HTML layout for the app — sets document language, favicons, meta tags, and app chrome.
+ *
+ * Renders the top-level HTML structure used by all pages: <head> with favicon/manifest/meta links and an RSS feed link,
+ * and <body> that applies the Inter font and dark-mode classes, includes the ThemeSwitcher, the page content (`children`),
+ * and the Footer.
+ *
+ * @param children - The page content to be rendered inside the layout's main container.
+ * @returns The root HTML element for the application.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
