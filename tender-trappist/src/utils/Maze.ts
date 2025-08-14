@@ -394,6 +394,13 @@ export async function solveDFS(
         }
     }
 
+    // If canceled, don't show a failure message.
+    if (!isSolvingRef.current) {
+        isSolvingRef.current = false;
+        showMessage("Solving canceled");
+        return;
+    }
+
     if (foundPath) {
         let currentPathCell: Cell | null = maze.endCell;
         while (currentPathCell && currentPathCell !== maze.startCell) {
@@ -401,7 +408,7 @@ export async function solveDFS(
             currentPathCell = currentPathCell.parent;
         }
         if (currentPathCell === maze.startCell) {
-           currentPathCell.isPath = true;
+            currentPathCell.isPath = true;
         }
         drawMazeAndPlayer(maze, player, ctx, canvas);
         showMessage("Path found using DFS!");
