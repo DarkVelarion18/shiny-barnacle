@@ -3,6 +3,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+/**
+ * Root React component rendering logos, heading, a counter button, and instructional text.
+ *
+ * Renders Vite and React logo links (opening in new tabs), a "Vite + React" heading, a card with a button that increments a local counter (displayed as "count is {count}"), and a note to edit `src/App.tsx` to test HMR.
+ *
+ * @returns The component's JSX element.
+ */
 function App() {
   const [count, setCount] = useState(0)
 

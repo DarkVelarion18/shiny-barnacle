@@ -5,6 +5,12 @@ type Props = {
   posts: Post[];
 };
 
+/**
+ * Renders a "More Stories" section containing a responsive grid of post preview cards.
+ *
+ * @param posts - Array of posts to display. Each post should provide `slug`, `title`, `coverImage`, `date`, `author`, and `excerpt` (used by PostPreview).
+ * @returns A React element with a heading and a grid of PostPreview components.
+ */
 export function MoreStories({ posts }: Props) {
   return (
     <section>

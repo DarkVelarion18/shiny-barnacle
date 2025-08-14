@@ -13,6 +13,16 @@ interface InitializeGameOptions {
   drawGame: () => void;
 }
 
+/**
+ * Initialize the maze game: configure the canvas, create a Maze and Player, and run startup callbacks.
+ *
+ * Sets `isSolvingRef.current` to `false`, resizes the provided `canvas` to `size * CELL_SIZE`, constructs
+ * a new `Maze(size, size)` and a `Player(0, 0)`, calls `drawGame()`, then invokes `onInit(maze, player, ctx, canvas, showMessage, isSolvingRef)`.
+ *
+ * @param onInit - Callback invoked after creation with arguments `(maze, player, ctx, canvas, showMessage, isSolvingRef)`.
+ * @param isSolvingRef - Mutable ref whose `current` property is reset to `false` to indicate no solve is in progress.
+ * @returns An object containing the created `{ maze, player }`.
+ */
 export function initializeGame(options: InitializeGameOptions) {
   const {
     size,

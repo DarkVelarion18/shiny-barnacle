@@ -1,5 +1,15 @@
 import { CMS_NAME } from "@/lib/constants";
 
+/**
+ * Renders the blog section header.
+ *
+ * Displays a large "Blog." heading and a subtitle that reads
+ * "A statically generated blog example using Next.js and {CMS_NAME}."
+ * The subtitle includes a link to Next.js and the interpolated CMS_NAME.
+ * The layout is responsive (vertical on small screens, horizontal on medium+) and styled with utility classes.
+ *
+ * @returns A JSX element containing the header section.
+ */
 export function Intro() {
   return (
     <section className="flex-col md:flex-row flex items-center md:justify-between mt-16 mb-16 md:mb-12">

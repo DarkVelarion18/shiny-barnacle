@@ -183,7 +183,16 @@ export class Player {
   }
 }
 
-// === VISUALIZATION HELPERS ===
+/**
+ * Draws a straight stroked line between two grid coordinates on the given canvas context.
+ *
+ * The coordinates are grid cell positions (not pixels) and are scaled by CELL_SIZE before drawing.
+ *
+ * @param x1 - X coordinate of the start cell
+ * @param y1 - Y coordinate of the start cell
+ * @param x2 - X coordinate of the end cell
+ * @param y2 - Y coordinate of the end cell
+ */
 
 function drawLine(
   ctx: CanvasRenderingContext2D,
@@ -198,6 +207,14 @@ function drawLine(
   ctx.stroke();
 }
 
+/**
+ * Renders the given maze onto the provided canvas context.
+ *
+ * Clears the canvas, fills cells that are explored, start, or end with their
+ * respective colors, draws cell walls as grid lines, and draws path indicator
+ * dots for cells marked `isPath`. Coordinates are taken from cell `x`,`y`
+ * and scaled by the module's `CELL_SIZE`; dot size uses `DOT_RADIUS`.
+ */
 export function drawMaze(maze: Maze, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (let y = 0; y < maze.height; y++) {
@@ -247,6 +264,13 @@ export function drawMaze(maze: Maze, ctx: CanvasRenderingContext2D, canvas: HTML
   }
 }
 
+/**
+ * Draws the player as a filled circle centered in the player's current grid cell.
+ *
+ * The circle is centered using CELL_SIZE and sized using PLAYER_SIZE; rendered with PLAYER_COLOR.
+ *
+ * @param player - Player object containing integer `x` and `y` grid coordinates
+ */
 export function drawPlayer(player: Player, ctx: CanvasRenderingContext2D): void {
   ctx.fillStyle = PLAYER_COLOR;
   ctx.beginPath();
@@ -260,6 +284,16 @@ export function drawPlayer(player: Player, ctx: CanvasRenderingContext2D): void 
   ctx.fill();
 }
 
+/**
+ * Renders the maze and then the player on the provided canvas context.
+ *
+ * Calls the maze rendering routine and then draws the player so the player appears above the maze.
+ *
+ * @param maze - The Maze instance to render.
+ * @param player - The Player instance whose position will be drawn.
+ * @param ctx - Canvas 2D rendering context used for drawing.
+ * @param canvas - The HTML canvas element (used by drawMaze for sizing/clearing).
+ */
 export function drawMazeAndPlayer(
   maze: Maze,
   player: Player,
@@ -270,12 +304,29 @@ export function drawMazeAndPlayer(
   drawPlayer(player, ctx);
 }
 
+/**
+ * Render the maze and player, then pause briefly to visualize a single step.
+ *
+ * Renders the current maze state and player to the provided canvas context, then awaits ~100ms to allow step-by-step animation.
+ *
+ * @returns A promise that resolves after the short visualization delay.
+ */
 async function visualizeStep(maze: Maze, player: Player, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement): Promise<void> {
   drawMaze(maze, ctx, canvas);
   drawPlayer(player, ctx);
   await new Promise(resolve => setTimeout(resolve, 100)); // pausa per visualizzare il passo
 }
 
+/**
+ * Returns orthogonally adjacent neighbor cells within the maze grid, ignoring walls.
+ *
+ * Examines the four cardinal neighbors (left, right, up, down) that are inside the maze bounds,
+ * then filters out cells already marked `isExplored` and the maze's `startCell`.
+ *
+ * @param cell - The cell whose neighbors to retrieve.
+ * @param maze - The maze containing the grid used for bounds and the `startCell` reference.
+ * @returns An array of adjacent, not-yet-explored neighbor cells (walls are not considered).
+ */
 function getNeighbors(cell: Cell, maze: Maze): Cell[] {
   const neighbors: Cell[] = [];
   const { x, y } = cell;
@@ -289,6 +340,20 @@ function getNeighbors(cell: Cell, maze: Maze): Cell[] {
 
   return neighbors.filter(n => !n.isExplored && n !== maze.startCell);
 }
+/**
+ * Asynchronously solves the maze using Depth-First Search (DFS) with step-by-step visualization.
+ *
+ * Explores the maze iteratively from the start cell, marking cells as explored, tracking their
+ * parents to reconstruct the path, and visualizing each step until the end cell is reached or
+ * all reachable cells have been explored. Upon completion, it highlights the found path or indicates failure.
+ *
+ * @param maze - The maze instance to solve.
+ * @param player - The player whose position is shown during visualization.
+ * @param ctx - The canvas rendering context used for drawing.
+ * @param canvas - The HTML canvas element where the maze and player are rendered.
+ * @param showMessage - Callback to display status or result messages.
+ * @param isSolvingRef - Mutable reference controlling the solving process, allowing cancellation.
+ */
 export async function solveDFS(
   maze: Maze,
   player: Player,
@@ -346,7 +411,31 @@ export async function solveDFS(
     isSolvingRef.current = false;
 }
 
-export async function solveBFS(
+/**
+     * Performs a breadth-first search on the maze to find a path from start to end while visualizing progress.
+     *
+     * Runs an animated BFS that marks cells' `visited`, `isExplored`, `parent`, and `distance` fields as it explores.
+     * If a path to `maze.endCell` is found the function reconstructs the path by following `parent` pointers and sets
+     * `isPath` on each cell in the path. The maze and player are re-rendered during the search via `drawMazeAndPlayer`
+     * and `visualizeStep`, and a status message is reported via `showMessage`.
+     *
+     * The search can be cancelled early by setting `isSolvingRef.current = false`; the function sets this flag to `true`
+     * on start and resets it to `false` before returning.
+     *
+     * Side effects:
+     * - Mutates cells in `maze.grid` (fields: `visited`, `isExplored`, `parent`, `distance`, `isPath`).
+     * - Renders to the provided canvas context.
+     * - Calls `showMessage` with the final outcome.
+     *
+     * @param maze - The maze to search.
+     * @param player - Current player state (used for rendering).
+     * @param ctx - Canvas 2D rendering context for visualization.
+     * @param canvas - Canvas element used for sizing/clearing during rendering.
+     * @param showMessage - Callback used to display short user-facing messages.
+     * @param isSolvingRef - Mutable ref object with a `current` boolean used to start/cancel the search.
+     * @returns A promise that resolves once the search completes (either by finding a path, exhausting reachable cells, or being cancelled).
+     */
+    export async function solveBFS(
   maze: Maze,
   player: Player,
   ctx: CanvasRenderingContext2D,

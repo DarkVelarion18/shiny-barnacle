@@ -17,6 +17,16 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root layout component that renders the full HTML document used by the application.
+ *
+ * Renders head links/meta (favicons, manifest, browser config, theme color) and an RSS feed link.
+ * The body applies the Inter font and dark-theme utility classes, mounts the ThemeSwitcher component,
+ * wraps `children` inside a min-height container, and appends the site Footer.
+ *
+ * @param children - React node(s) rendered as the page content inside this layout.
+ * @returns The root `<html>` element for the app.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
