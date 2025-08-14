@@ -65,8 +65,9 @@ class GameScene: SKScene {
     }
     
     func moveRight() {
-        let newPosition = player.position.x + playerSpeed
-        player.position.x = min(newPosition, 290)
+        guard let player = player else { return }
+        let newX = min(player.position.x + playerSpeed, 290)
+        player.position.x = newX
     }
     
     func fireBullet() {
