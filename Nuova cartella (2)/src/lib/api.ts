@@ -12,8 +12,11 @@ const postsDirectory = join(process.cwd(), "_posts");
  *
  * @returns The file names (slugs) present in the `_posts` directory.
  */
-export function getPostSlugs() {
-  return fs.readdirSync(postsDirectory);
+export function getPostSlugs(): string[] {
+  return fs
+    .readdirSync(postsDirectory, { withFileTypes: true })
+    .filter((d) => d.isFile() && d.name.endsWith(".md"))
+    .map((d) => d.name);
 }
 
 /**
