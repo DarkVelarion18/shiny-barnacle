@@ -184,14 +184,15 @@ export class Player {
 }
 
 /**
- * Draws a straight stroked line between two grid coordinates on the given canvas context.
+ * Draws a straight stroked line between two grid cells on the provided canvas context.
  *
- * The coordinates are grid cell positions (not pixels) and are scaled by CELL_SIZE before drawing.
+ * Coordinates are grid-cell indices (not pixels); they are multiplied by `CELL_SIZE` before drawing.
  *
- * @param x1 - X coordinate of the start cell
- * @param y1 - Y coordinate of the start cell
- * @param x2 - X coordinate of the end cell
- * @param y2 - Y coordinate of the end cell
+ * @param ctx - Canvas rendering context used to draw the line
+ * @param x1 - X index of the start cell (grid units)
+ * @param y1 - Y index of the start cell (grid units)
+ * @param x2 - X index of the end cell (grid units)
+ * @param y2 - Y index of the end cell (grid units)
  */
 
 function drawLine(
@@ -208,12 +209,15 @@ function drawLine(
 }
 
 /**
- * Renders the given maze onto the provided canvas context.
+ * Render the maze state onto the given canvas.
  *
- * Clears the canvas, fills cells that are explored, start, or end with their
- * respective colors, draws cell walls as grid lines, and draws path indicator
- * dots for cells marked `isPath`. Coordinates are taken from cell `x`,`y`
- * and scaled by the module's `CELL_SIZE`; dot size uses `DOT_RADIUS`.
+ * Draws explored cells, start/end cells, cell walls, and path indicator dots
+ * according to each cell's flags (isExplored, isStart, isEnd, walls, isPath).
+ * Coordinates are taken from cell.x/cell.y and scaled by CELL_SIZE; path dots use DOT_RADIUS.
+ *
+ * @param maze - The Maze instance to render.
+ * @param ctx - 2D rendering context of the target canvas.
+ * @param canvas - The canvas element to which the maze is drawn.
  */
 export function drawMaze(maze: Maze, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -267,9 +271,10 @@ export function drawMaze(maze: Maze, ctx: CanvasRenderingContext2D, canvas: HTML
 /**
  * Draws the player as a filled circle centered in the player's current grid cell.
  *
- * The circle is centered using CELL_SIZE and sized using PLAYER_SIZE; rendered with PLAYER_COLOR.
+ * The circle's center is computed from CELL_SIZE; its diameter is PLAYER_SIZE and it is filled with PLAYER_COLOR.
  *
- * @param player - Player object containing integer `x` and `y` grid coordinates
+ * @param player - Player with integer grid coordinates (x, y).
+ * @param ctx - Canvas rendering context to draw into.
  */
 export function drawPlayer(player: Player, ctx: CanvasRenderingContext2D): void {
   ctx.fillStyle = PLAYER_COLOR;
@@ -285,14 +290,14 @@ export function drawPlayer(player: Player, ctx: CanvasRenderingContext2D): void 
 }
 
 /**
- * Renders the maze and then the player on the provided canvas context.
+ * Render the maze then draw the player on top.
  *
- * Calls the maze rendering routine and then draws the player so the player appears above the maze.
+ * Renders the maze onto the provided canvas/context and then draws the player so the player appears above maze elements.
  *
- * @param maze - The Maze instance to render.
- * @param player - The Player instance whose position will be drawn.
- * @param ctx - Canvas 2D rendering context used for drawing.
- * @param canvas - The HTML canvas element (used by drawMaze for sizing/clearing).
+ * @param maze - Maze to render.
+ * @param player - Player whose current grid position will be drawn.
+ * @param ctx - Canvas 2D rendering context to draw with.
+ * @param canvas - Canvas element (used for sizing/clearing when rendering the maze).
  */
 export function drawMazeAndPlayer(
   maze: Maze,

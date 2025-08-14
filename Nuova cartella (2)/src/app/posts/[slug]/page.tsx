@@ -55,16 +55,15 @@ type Params = {
 };
 
 /**
- * Produces page metadata (title and Open Graph data) for a post identified by slug.
+ * Create page metadata (title and Open Graph image) for a post identified by slug.
  *
- * Resolves props.params to obtain the slug, loads the post via getPostBySlug, and returns a Metadata
- * object with a composed page title ("<post title> | Next.js Blog Example with <CMS_NAME>") and
- * Open Graph images derived from the post (post.ogImage.url).
- *
- * If the post cannot be found, calls and returns notFound() to signal a 404.
+ * Awaits `props.params` to get `{ slug }`, loads the post with `getPostBySlug`, and returns a Metadata
+ * object containing a composed page title (`"<post.title> | Next.js Blog Example with <CMS_NAME>"`)
+ * and `openGraph.images` set to the post's `ogImage.url`. If the post is not found, calls `notFound()`
+ * to signal a 404 response.
  *
  * @param props - An object whose `params` promise resolves to `{ slug: string }`.
- * @returns A Metadata object containing `title` and `openGraph.images` for the post.
+ * @returns Metadata with `title` and `openGraph.images` for the requested post, or triggers a 404 via `notFound()`.
  */
 export async function generateMetadata(props: Params): Promise<Metadata> {
   const params = await props.params;

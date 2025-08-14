@@ -5,11 +5,9 @@ import { MoreStories } from "@/app/_components/more-stories";
 import { getAllPosts } from "@/lib/api";
 
 /**
- * Page component that renders the homepage with a featured (hero) post and additional stories.
+ * Renders the homepage with a featured (hero) post and optional additional stories.
  *
- * Retrieves all posts synchronously via `getAllPosts()`, uses the first post as the hero post and the remaining posts as additional stories, then renders Intro, HeroPost (populated from the hero post's fields), and, if present, a MoreStories list.
- *
- * Note: This component assumes at least one post is returned by `getAllPosts()`; if the list is empty, the hero post access will be undefined and may cause a runtime error.
+ * Calls `getAllPosts()` synchronously, uses the first post as the hero post and the remaining posts as "more" posts. If a hero post exists, renders `HeroPost` populated from that post and, when present, `MoreStories` with the remaining posts. If no posts are available, renders a centered "No posts yet." message.
  *
  * @returns The homepage JSX element.
  */
