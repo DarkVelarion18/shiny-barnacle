@@ -17,11 +17,6 @@
         "name": "next"
       }
     ],
-   "plugins": [
-     {
-       "name": "next"
-     }
-   ],
    "baseUrl": ".",
    "paths": {
      "@/*": ["./src/*"]
