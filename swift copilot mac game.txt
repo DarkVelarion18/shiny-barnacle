@@ -96,22 +96,21 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if bulletState == "fire" {
-            bullet.position.y += bulletSpeed
-            for invader in invaders {
-                if bullet.frame.intersects(invader.frame) {
-                    bullet.isHidden = true
-                    bulletState = "ready"
-                    let x = CGFloat.random(in: -290...290)
-                    let y = CGFloat.random(in: 100...250)
-                    invader.position = CGPoint(x: x, y: y)
-                    score += 10
-                }
-                if bullet.position.y > 290 {
-                    bullet.isHidden = true
-                    bulletState = "ready"
-                }
+        guard bulletState == "fire", let bullet = bullet else { return }
+        bullet.position.y += bulletSpeed
+        for invader in invaders {
+            if bullet.frame.intersects(invader.frame) {
+                bullet.isHidden = true
+                bulletState = "ready"
+                let x = CGFloat.random(in: -290...290)
+                let y = CGFloat.random(in: 100...250)
+                invader.position = CGPoint(x: x, y: y)
+                score += 10
             }
+        }
+        if bullet.position.y > 290 {
+            bullet.isHidden = true
+            bulletState = "ready"
         }
     }
 }
