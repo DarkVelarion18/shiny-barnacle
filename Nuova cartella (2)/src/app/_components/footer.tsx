@@ -1,6 +1,15 @@
 import Container from "@/app/_components/container";
 import { EXAMPLE_PATH } from "@/lib/constants";
 
+/**
+ * Footer component rendering the site's footer with links to Next.js docs and the example repository.
+ *
+ * Renders a responsive footer containing a heading ("Statically Generated with Next.js.") and two actions:
+ * a prominent "Read Documentation" link to Next.js routing/layouts docs and a "View on GitHub" link whose
+ * URL is constructed from EXAMPLE_PATH at render time.
+ *
+ * @returns A JSX element representing the site footer.
+ */
 export function Footer() {
   return (
     <footer className="bg-neutral-50 border-t border-neutral-200 dark:bg-slate-800">

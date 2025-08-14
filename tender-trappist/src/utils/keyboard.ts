@@ -1,4 +1,18 @@
 import { Maze, Player, CELL_SIZE } from './Maze';
+/**
+ * Registers global WASD keyboard controls to move the player inside the maze.
+ *
+ * Listens for 'w', 'a', 's', 'd' keydown events and, when appropriate, moves the
+ * provided player by one cell, redraws the game, and invokes the post-move callback.
+ *
+ * @param maze - The Maze instance used for validating/mapping moves.
+ * @param player - The Player to move; if falsy no handler action is taken.
+ * @param drawGame - Callback that redraws the game after a successful move.
+ * @param onPlayerMove - Callback invoked after moving the player; receives (maze, player, ctx, canvas).
+ * @param isSolvingRef - Ref object with a boolean `current` flag; input is ignored while `current` is true.
+ * @param canvas - Canvas element passed to `onPlayerMove`.
+ * @param ctx - Canvas rendering context passed to `onPlayerMove`.
+ */
 export function setupKeyboardControls(
   maze: Maze,
   player: Player,
