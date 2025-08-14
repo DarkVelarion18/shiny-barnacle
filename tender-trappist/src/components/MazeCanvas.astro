@@ -27,23 +27,19 @@ const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
 <canvas id="mazeCanvas"></canvas>
 
 <script type="module" lang="ts">
+  import type { Maze } from '../utils/Maze';
+  import type { Player } from '../utils/Player';
+  import type { IsSolvingRef } from '../types/maze';
+  import { MazeRenderer } from '../utils/MazeRenderer';
+  import { initializeGame } from '../utils/mazeGame';
+  import { setupKeyboardControls } from '../utils/keyboard';
   import {
-    Maze,
-    Player,
-    CELL_SIZE,
-    
-  } from '../utils/Maze';
+    generateMaze as generateMazeFn,
+    solveMaze as solveMazeFn,
+    resetPlayer as resetPlayerFn,
+    stopSolution as stopSolutionFn,
+  } from '../utils/mazeFunctions';
 
-  
-  /**
-   * @typedef {Object} ComponentProps
-   * @property {number} mazeSize
-   * @property {(maze: Maze, player: Player, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, showMessage: (msg: string, duration?: number) => void, isSolvingRef: { current: boolean }) => void} onInit
-   * @property {(maze: Maze, player: Player, ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) => void} onPlayerMove
-   * @property {(msg: string, duration?: number) => void} showMessage
-   */
-
-  
   const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
 
   const canvas = document.getElementById('mazeCanvas');
@@ -55,39 +51,63 @@ const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
     throw new Error('Could not get 2D context from canvas.');
   }
 
-  function initializeGame(size) {
-  isSolvingRef.current = false;
+  const isSolvingRef: IsSolvingRef = { current: false };
+  let maze: Maze;
+  let player: Player;
 
-  canvas.width = size * CELL_SIZE;
-  canvas.height = size * CELL_SIZE;
+  const renderer = new MazeRenderer(canvas);
 
-  maze = new Maze(size, size);
-  player = new Player(0, 0);
+  const drawGame = () => {
+    if (!maze) return;
+    renderer.draw(maze, player);
+  };
 
-  drawGame();
-  onInit(maze, player, ctx, canvas, showMessage, isSolvingRef);
-}
-
-  let maze, player;
-
-  ({ maze, player } = initializeGame(
-    mazeSize,
+  // Initialize
+  ({ maze, player } = initializeGame({
+    size: mazeSize,
     canvas,
     ctx,
-    onInit,
+    onInit: (m, p, _ctx, _canvas, show, ref) => {
+      // Forward to external onInit with a renderer
+      onInit?.(m, p, renderer, show, ref);
+    },
     showMessage,
     isSolvingRef,
-    drawGame
-  ));
+    drawGame,
+  }));
+  drawGame();
 
-setupKeyboardControls(maze, player, drawGame, onPlayerMove, isSolvingRef, canvas, ctx);
+  // Controls
+  setupKeyboardControls(
+    maze,
+    player,
+    drawGame,
+    (m, p) => onPlayerMove?.(m, p, renderer),
+    isSolvingRef,
+    canvas,
+    ctx
+  );
 
-  
-  initializeGame(mazeSize);
-
-    window.mazeFunctions = {
-    generateMaze,
-    };
+  // Expose functions to window
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).mazeFunctions = {
+    generateMaze: (newSize: number) => {
+      ({ maze, player } = generateMazeFn(
+        newSize,
+        canvas,
+        ctx,
+        (m, p, _ctx, _canvas, show, ref) => onInit?.(m, p, renderer, show, ref),
+        showMessage,
+        isSolvingRef,
+        drawGame
+      ));
+      drawGame();
+    },
+    solveMaze: (algorithm: string) =>
+      solveMazeFn(algorithm, maze, player, ctx, canvas, showMessage, isSolvingRef, drawGame),
+    resetPlayer: () => resetPlayerFn(maze, player, drawGame, showMessage, isSolvingRef),
+    stopSolution: () => stopSolutionFn(maze, drawGame, showMessage, isSolvingRef),
+  };
 </script>
 
 <style>
