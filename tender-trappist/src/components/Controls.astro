@@ -1,0 +1,64 @@
+---
+interface Props {
+  onGenerateMaze: (size: number) => void;
+  onSolveMaze: (algorithm: string) => void;
+  onResetPlayer: () => void;
+  onStopSolution: () => void;
+}
+
+const { onGenerateMaze, onSolveMaze, onResetPlayer, onStopSolution } = Astro.props;
+---
+
+<div class="controls-container">
+    <div class="control-group">
+        <label for="mazeSize">Maze Size (NxN):</label>
+        <input type="number" id="mazeSize" value="15" min="5" max="50" class="control-element">
+        <button id="generateMazeBtn" class="button-primary">Generate New Maze</button>
+    </div>
+
+    <div class="control-group">
+        <label for="solveAlgorithm">Solve Algorithm:</label>
+        <select id="solveAlgorithm" class="control-element">
+            <option value="bfs">Breadth-First Search (BFS)</option>
+            <option value="dfs">Depth-First Search (DFS)</option>
+        </select>
+        <button id="solveMazeBtn" class="button-primary button-solve">Solve Maze</button>
+    </div>
+
+    <div class="control-group">
+        <button id="resetPlayerBtn" class="button-primary">Reset Player</button>
+        <button id="stopSolutionBtn" class="button-primary">Stop Solution</button>
+    </div>
+</div>
+
+<script type="module" lang="ts">
+  // Get props passed from Astro.props
+  const { onGenerateMaze, onSolveMaze, onResetPlayer, onStopSolution } = Astro.props;
+
+  document.getElementById('generateMazeBtn')?.addEventListener('click', () => {
+    const sizeInput = document.getElementById('mazeSize');
+    const newSize = sizeInput instanceof HTMLInputElement ? parseInt(sizeInput.value) : NaN;
+    if (!isNaN(newSize) && newSize >= 5 && newSize <= 50) {
+      onGenerateMaze(newSize);
+    } else {
+      // Message handled by MazeCanvas via prop function
+      if (window.mazeFunctions && window.mazeFunctions.showMessage) {
+        window.mazeFunctions.showMessage('Please enter a maze size between 5 and 50.', 5000);
+      }
+    }
+  });
+
+  document.getElementById('solveMazeBtn')?.addEventListener('click', () => {
+    const algorithmSelect = document.getElementById('solveAlgorithm');
+    const selectedAlgorithm = algorithmSelect instanceof HTMLSelectElement ? algorithmSelect.value : '';
+    onSolveMaze(selectedAlgorithm);
+  });
+
+  document.getElementById('resetPlayerBtn')?.addEventListener('click', () => {
+    onResetPlayer();
+  });
+
+  document.getElementById('stopSolutionBtn')?.addEventListener('click', () => {
+    onStopSolution();
+  });
+</script>

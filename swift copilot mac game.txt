@@ -1,0 +1,118 @@
+SpriteKit GameScene notes and sample code.
+This document outlines the structure of a simple SpriteKit shooter scene with a player, bullet, invaders, movement, and collisions.
+Swift
+import SpriteKit
+import GameplayKit
+
+class GameScene: SKScene {
+    
+    var player: SKSpriteNode?
+    var scoreLabel: SKLabelNode?
+    var score: Int = 0 {
+        didSet {
+            scoreLabel?.text = "Score: \(score)"
+        }
+    }
+    var bullet: SKSpriteNode?
+    var invaders: [SKSpriteNode] = []
+    let playerSpeed: CGFloat = 30.0
+    let bulletSpeed: CGFloat = 10.0
+    let invaderSpeed: CGFloat = 2.0
+    var bulletState: String = "ready"
+    
+    override func didMove(to view: SKView) {
+        backgroundColor = SKColor.black
+        
+        // Configure and add score label
+        let label = SKLabelNode(fontNamed: "Courier")
+        label.fontSize = 12
+        label.fontColor = SKColor.white
+        label.position = CGPoint(x: -290, y: 260)
+        addChild(label)
+        scoreLabel = label
+        score = 0
+
+        // Configure and add player node
+        let playerNode = SKSpriteNode(imageNamed: "player")
+        playerNode.position = CGPoint(x: 0, y: -250)
+        playerNode.zRotation = CGFloat.pi / 2
+        addChild(playerNode)
+        player = playerNode
+
+        // Configure and add bullet node
+        let bulletNode = SKSpriteNode(imageNamed: "bullet")
+        bulletNode.position = CGPoint(x: playerNode.position.x, y: playerNode.position.y + 10)
+        bulletNode.isHidden = true
+        addChild(bulletNode)
+        bullet = bulletNode
+        for _ in 0..<5 {
+            let invader = SKSpriteNode(imageNamed: "invader")
+            let x = CGFloat.random(in: -290...290)
+            let y = CGFloat.random(in: 100...250)
+            invader.position = CGPoint(x: x, y: y)
+            addChild(invader)
+            invaders.append(invader)
+        }
+        
+        let moveInvadersAction = SKAction.sequence([SKAction.run(moveInvaders), SKAction.wait(forDuration: 0.1)])
+        run(SKAction.repeatForever(moveInvadersAction))
+    }
+    
+    func moveLeft() {
+        guard let player = player else { return }
+        let newX = max(player.position.x - playerSpeed, -290)
+        player.position.x = newX
+    }
+    
+    func moveRight() {
+        guard let player = player else { return }
+        let newX = min(player.position.x + playerSpeed, 290)
+        player.position.x = newX
+    }
+    
+    func fireBullet() {
+        if bulletState == "ready" {
+            bulletState = "fire"
+            bullet.position = CGPoint(x: player.position.x, y: player.position.y + 10)
+            bullet.isHidden = false
+        }
+    }
+    
+    func moveInvaders() {
+        for invader in invaders {
+            invader.position.y -= invaderSpeed
+            if player.frame.intersects(invader.frame) {
+                player.isHidden = true
+                invader.isHidden = true
+                print("GAME OVER!!!")
+                self.view?.isPaused = true
+            }
+            if invader.position.y < -290 {
+                player.isHidden = true
+                invader.isHidden = true
+                print("GAME OVER!!!")
+                self.view?.isPaused = true
+            }
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        guard bulletState == "fire", let bullet = bullet else { return }
+        bullet.position.y += bulletSpeed
+        for invader in invaders {
+            if bullet.frame.intersects(invader.frame) {
+                bullet.isHidden = true
+                bulletState = "ready"
+                let x = CGFloat.random(in: -290...290)
+                let y = CGFloat.random(in: 100...250)
+                invader.position = CGPoint(x: x, y: y)
+                score += 10
+            }
+        }
+        if bullet.position.y > 290 {
+            bullet.isHidden = true
+            bulletState = "ready"
+        }
+    }
+}
+This code provides a basic structure for your game using SpriteKit in Swift. You will need to add the images for the player, bullet, and invader, and handle user input properly.

@@ -1,0 +1,96 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MazeCanvas from '../components/MazeCanvas.astro';
+import Controls from '../components/Controls.astro';
+import { Maze} from '../utils/Maze';
+import { MazeRenderer } from '../utils/MazeRenderer';
+import { Player } from '../utils/Player';
+import type { ShowMessageFunction, IsSolvingRef } from '../types/maze';
+
+
+let currentMaze: Maze | null = null;
+let currentPlayer: Player | null = null;
+let currentCtx: CanvasRenderingContext2D | null = null;
+let currentCanvas: HTMLCanvasElement | null = null;
+let showMessageGlobal: ((msg: string, duration?: number) => void) | null = null;
+let isSolvingGlobalRef: { current: boolean } | null = null;
+
+
+const handleMazeInit = (
+  maze: Maze,
+  player: Player,
+  renderer: MazeRenderer,
+  showMessage: ShowMessageFunction,
+  isSolvingRef: IsSolvingRef
+) => {
+  currentMaze = maze;
+  currentPlayer = player;
+  showMessageGlobal = showMessage;
+  isSolvingGlobalRef = isSolvingRef;
+};
+
+const handlePlayerMove = (
+  maze: Maze,
+  player: Player,
+  renderer: MazeRenderer
+): void => {
+  renderer.draw(maze, player);
+};
+
+
+const handleGenerateMaze = (size: number) => {
+  if (currentMaze && currentCanvas && currentCtx && currentPlayer && showMessageGlobal && isSolvingGlobalRef) {
+    // Call the global function exposed by MazeCanvas
+    (window as any).mazeFunctions.generateMaze(size);
+  }
+};
+
+const handleSolveMaze = (algorithm: string) => {
+  if (currentMaze && currentCanvas && currentCtx && currentPlayer && showMessageGlobal && isSolvingGlobalRef) {
+    // Call the global function exposed by MazeCanvas
+    (window as any).mazeFunctions.solveMaze(algorithm);
+  }
+};
+
+const handleResetPlayer = () => {
+  if (currentMaze && currentCanvas && currentCtx && currentPlayer && showMessageGlobal && isSolvingGlobalRef) {
+    (window as any).mazeFunctions.resetPlayer();
+  }
+};
+
+const handleStopSolution = () => {
+  if (currentMaze && currentCanvas && currentCtx && currentPlayer && showMessageGlobal && isSolvingGlobalRef) {
+    (window as any).mazeFunctions.stopSolution();
+  }
+};
+
+---
+
+<Layout title="Maze Navigator and Solver">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Interactive Maze Explorer</h1>
+
+  <MazeCanvas
+  mazeSize={15}
+  onInit={handleMazeInit}
+  onPlayerMove={handlePlayerMove}
+  showMessage={(msg, duration) => {
+      const messageBox = document.getElementById('messageBox');
+      if (messageBox) {
+        messageBox.textContent = msg;
+        messageBox.style.display = 'block';
+        setTimeout(() => {
+          messageBox.style.display = 'none';
+        }, duration || 3000);
+      }
+    }}
+  />
+
+  <Controls
+    onGenerateMaze={handleGenerateMaze}
+    onSolveMaze={handleSolveMaze}
+    onResetPlayer={handleResetPlayer}
+    onStopSolution={handleStopSolution}
+  />
+
+  <div id="messageBox"></div>
+</Layout>
