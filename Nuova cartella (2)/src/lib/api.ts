@@ -30,8 +30,12 @@ export function getPostSlugs(): string[] {
  * @param slug - The post identifier (filename with or without the trailing `.md`)
  * @returns The `Post` composed of front matter fields, `slug`, and Markdown `content`
  */
-export function getPostBySlug(slug: string) {
+export function getPostBySlug(slug: string): Post {
   const realSlug = slug.replace(/\.md$/, "");
+  // Basic traversal guard
+  if (realSlug.includes("..") || realSlug.includes("/") || realSlug.includes("\\")) {
+    throw new Error("Invalid slug");
+  }
   const fullPath = join(postsDirectory, `${realSlug}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
