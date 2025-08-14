@@ -58,6 +58,12 @@ export function getAllPosts(): Post[] {
   const posts = slugs
     .map((slug) => getPostBySlug(slug))
     // sort posts by date in descending order
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+    .sort((a, b) => {
+      const t1 = new Date(a.date).getTime();
+      const t2 = new Date(b.date).getTime();
+      if (Number.isNaN(t1) || Number.isNaN(t2)) return 0;
+      return t2 - t1;
+    });
   return posts;
+}
 }
