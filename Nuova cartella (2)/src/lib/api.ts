@@ -66,4 +66,3 @@ export function getAllPosts(): Post[] {
     });
   return posts;
 }
-}
