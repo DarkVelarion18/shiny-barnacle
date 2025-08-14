@@ -13,5 +13,3 @@ const Container = ({ children, className, ...rest }: Props) => {
 };
 
 export default Container;
-
-export default Container;
