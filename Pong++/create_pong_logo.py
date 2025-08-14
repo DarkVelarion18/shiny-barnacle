@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw
-
+from pathlib import Path
 # Carica lo sfondo fornito
 sfondo = Image.open("image1.jpg").convert("RGBA")  # Usa "image1.png" se il file è PNG
 
