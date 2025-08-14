@@ -1,7 +1,8 @@
 import { Maze } from './Maze';
 import { Player } from './Player';
-import { MAZE_CONFIG, COLORS } from './constants';
-import { CELL_SIZE } from './Maze';
+-import { MAZE_CONFIG, COLORS } from './constants';
+-import { CELL_SIZE } from './Maze';
++import { MAZE_CONFIG, COLORS, CELL_SIZE } from './constants';
 
 interface InitializeGameOptions {
   size: number;
