@@ -1,17 +1,22 @@
 import { Maze, Player, CELL_SIZE } from './Maze';
 /**
- * Registers global WASD keyboard controls to move the player inside the maze.
+ * Register global WASD keyboard handlers to move the player one cell and trigger post-move updates.
  *
- * Listens for 'w', 'a', 's', 'd' keydown events and, when appropriate, moves the
- * provided player by one cell, redraws the game, and invokes the post-move callback.
+ * Listens for 'w', 'a', 's', 'd' keydown events and, when a move is applicable, calls
+ * `player.move(dx, dy, maze)`, then `drawGame()`, and finally `onPlayerMove(maze, player, ctx, canvas)`.
+ * The handler is a global keydown listener and is not removed by this function.
  *
- * @param maze - The Maze instance used for validating/mapping moves.
- * @param player - The Player to move; if falsy no handler action is taken.
- * @param drawGame - Callback that redraws the game after a successful move.
- * @param onPlayerMove - Callback invoked after moving the player; receives (maze, player, ctx, canvas).
- * @param isSolvingRef - Ref object with a boolean `current` flag; input is ignored while `current` is true.
- * @param canvas - Canvas element passed to `onPlayerMove`.
- * @param ctx - Canvas rendering context passed to `onPlayerMove`.
+ * Behavior notes:
+ * - No action is taken if `player` is falsy, `isSolvingRef.current` is true, or `maze` is falsy.
+ * - Moves are single-cell steps: 'w' = up (dy = -1), 's' = down (dy = 1), 'a' = left (dx = -1), 'd' = right (dx = 1).
+ *
+ * @param maze - Maze instance used to validate/apply moves.
+ * @param player - Player to move.
+ * @param drawGame - Callback invoked to redraw the game after a move.
+ * @param onPlayerMove - Callback invoked after moving; receives (maze, player, ctx, canvas).
+ * @param isSolvingRef - Mutable ref object with a boolean `current`; input is ignored while `current` is true.
+ * @param canvas - Canvas element forwarded to `onPlayerMove`.
+ * @param ctx - CanvasRenderingContext2D forwarded to `onPlayerMove`.
  */
 export function setupKeyboardControls(
   maze: Maze,

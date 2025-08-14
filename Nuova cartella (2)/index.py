@@ -58,9 +58,9 @@ class Client(commands.CommandsClient):
     @commands.command()
     async def about(self, ctx: commands.Context):
         """
-        Send a brief informational message describing the bot to the current channel.
+        Send an informational message about the bot to the invocation channel.
         
-        Sends: "Hello, This is Rumpus a Friendly Python Revolt Bot!."
+        Sends the literal string "Hello, This is Rumpus a Friendly Python Revolt Bot!." to the channel where the command was invoked.
         """
         
         await ctx.send("Hello, This is Rumpus a Friendly Python Revolt Bot!.")

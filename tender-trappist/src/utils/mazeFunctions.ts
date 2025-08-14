@@ -6,12 +6,12 @@ import { solveDFS } from './Maze';
 
 
 /**
- * Initialize a new maze game session with the given size and drawing/context callbacks.
+ * Initialize a new maze game session.
  *
- * Delegates to initializeGame with the provided canvas, rendering context, lifecycle callbacks, and solving-state reference.
+ * Delegates to `initializeGame`, forwarding the provided canvas, rendering context, lifecycle callbacks, draw function, and the mutable `isSolvingRef`.
  *
- * @param newSize - Maze dimension (number of cells per side).
- * @param isSolvingRef - Mutable ref whose `.current` indicates whether a solution run is active.
+ * @param newSize - Number of cells per side for the generated maze.
+ * @param isSolvingRef - Mutable ref whose `.current` is true while a solution visualization is running.
  */
 export function generateMaze(
   newSize: number,
@@ -34,11 +34,14 @@ export function generateMaze(
 }
 
 /**
- * Orchestrates solving the given maze using the specified algorithm.
+ * Orchestrates solving the provided maze with the chosen algorithm.
  *
- * Prepares the maze for solution visualization, invokes the selected solver, and requests redraws before and after solving.
+ * Prepares the maze for solution visualization, redraws the board, runs the selected solver (`'bfs'` or `'dfs'`), and redraws again when finished.
+ * The function returns immediately without action if `maze` is falsy or a solution is already running (guarded by `isSolvingRef.current`).
+ * If an unknown algorithm string is provided, a message is shown and no solver is invoked.
  *
- * @param algorithm - Solver to run; supported values: `'bfs'` or `'dfs'`. If another value is provided, no solver is invoked.
+ * @param algorithm - Solver to run; supported values: `'bfs'` or `'dfs'`.
+ * @returns A promise that resolves when the solving process (and final redraw) completes.
  */
 export async function solveMaze(
   algorithm: string,
@@ -67,16 +70,14 @@ export async function solveMaze(
 }
 
 /**
- * Reset the player's position and clear any ongoing solution visualization.
+ * Reset the player's position to the maze origin and clear any solution visualization.
  *
- * Sets the solving flag to false, clears solution-related cell state on the maze,
- * moves the player back to (0, 0), redraws the game, and shows a short "Player reset!" message.
+ * Clears solution-related cell state on the provided maze (via maze.resetCellsForSolution()),
+ * sets the solving flag to false, moves the player to coordinates (0,0), triggers a redraw,
+ * and displays a short "Player reset!" message.
  *
- * @param maze - The Maze instance whose solution visualization will be cleared.
- * @param player - The Player object whose coordinates will be reset to (0, 0).
- * @param drawGame - Callback to re-render the maze and player after the reset.
- * @param showMessage - Function to display a user-facing message; invoked with `"Player reset!"` for 2000ms.
- * @param isSolvingRef - Mutable ref object containing the current solving state; its `.current` property will be set to `false`.
+ * @param maze - Maze whose solution state will be cleared.
+ * @param player - Player whose coordinates will be reset to the origin (0,0).
  */
 export function resetPlayer(
   maze: Maze,
