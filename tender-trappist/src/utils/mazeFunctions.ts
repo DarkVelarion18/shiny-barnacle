@@ -59,6 +59,8 @@ export async function solveMaze(
     await solveBFS(maze, player, ctx, canvas, showMessage, isSolvingRef);
   } else if (algorithm === 'dfs') {
     await solveDFS(maze, player, ctx, canvas, showMessage, isSolvingRef);
+  } else {
+    showMessage(`Unknown algorithm "${algorithm}". Use "bfs" or "dfs".`, 2000);
   }
 
   drawGame();
