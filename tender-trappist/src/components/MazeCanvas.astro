@@ -1,0 +1,125 @@
+---
+import type { ShowMessageFunction, IsSolvingRef } from '../types/maze';
+import { Maze } from '../utils/Maze.ts';
+import { Player } from '../utils/Player';
+import { MazeRenderer } from '../utils/MazeRenderer';
+
+interface Props {
+  mazeSize: number;
+  onInit: (
+    maze: Maze,
+    player: Player,
+    renderer: MazeRenderer,
+    showMessage: ShowMessageFunction,
+    isSolvingRef: IsSolvingRef
+  ) => void;
+  onPlayerMove: (
+    maze: Maze,
+    player: Player,
+    renderer: MazeRenderer
+  ) => void;
+  showMessage: ShowMessageFunction;
+}
+
+const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
+---
+
+<canvas id="mazeCanvas"></canvas>
+
+<script type="module" lang="ts">
+  import type { Maze } from '../utils/Maze';
+  import type { Player } from '../utils/Player';
+  import type { IsSolvingRef } from '../types/maze';
+  import { MazeRenderer } from '../utils/MazeRenderer';
+  import { initializeGame } from '../utils/mazeGame';
+  import { setupKeyboardControls } from '../utils/keyboard';
+  import {
+    generateMaze as generateMazeFn,
+    solveMaze as solveMazeFn,
+    resetPlayer as resetPlayerFn,
+    stopSolution as stopSolutionFn,
+  } from '../utils/mazeFunctions';
+
+  const { mazeSize, onInit, onPlayerMove, showMessage } = Astro.props;
+
+  const canvas = document.getElementById('mazeCanvas');
+  if (!(canvas instanceof HTMLCanvasElement)) {
+    throw new Error('Element with id "mazeCanvas" is not a canvas.');
+  }
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('Could not get 2D context from canvas.');
+  }
+
+  const isSolvingRef: IsSolvingRef = { current: false };
+  let maze: Maze;
+  let player: Player;
+
+  const renderer = new MazeRenderer(canvas);
+
+  const drawGame = () => {
+    if (!maze) return;
+    renderer.draw(maze, player);
+  };
+
+  // Initialize
+  ({ maze, player } = initializeGame({
+    size: mazeSize,
+    canvas,
+    ctx,
+    onInit: (m, p, _ctx, _canvas, show, ref) => {
+      // Forward to external onInit with a renderer
+      onInit?.(m, p, renderer, show, ref);
+    },
+    showMessage,
+    isSolvingRef,
+    drawGame,
+  }));
+  drawGame();
+
+  // Controls
+  setupKeyboardControls(
+    maze,
+    player,
+    drawGame,
+    (m, p) => onPlayerMove?.(m, p, renderer),
+    isSolvingRef,
+    canvas,
+    ctx
+  );
+
+  // Expose functions to window
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).mazeFunctions = {
+    generateMaze: (newSize: number) => {
+      ({ maze, player } = generateMazeFn(
+        newSize,
+        canvas,
+        ctx,
+        (m, p, _ctx, _canvas, show, ref) => onInit?.(m, p, renderer, show, ref),
+        showMessage,
+        isSolvingRef,
+        drawGame
+      ));
+      drawGame();
+    },
+    solveMaze: (algorithm: string) =>
+      solveMazeFn(algorithm, maze, player, ctx, canvas, showMessage, isSolvingRef, drawGame),
+    resetPlayer: () => resetPlayerFn(maze, player, drawGame, showMessage, isSolvingRef),
+    stopSolution: () => stopSolutionFn(maze, drawGame, showMessage, isSolvingRef),
+  };
+</script>
+
+<style>
+  canvas {
+      background-color: #ffffff;
+      border: 2px solid #334155; 
+      border-radius: 8px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      touch-action: none; 
+      max-width: 90vw; 
+      max-height: 70vh; 
+      width: auto;
+      height: auto;
+  }
+</style>

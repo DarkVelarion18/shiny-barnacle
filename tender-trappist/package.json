@@ -1,0 +1,16 @@
+{
+  "name": "tender-trappist",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/language-server": "^2.15.4",
+    "astro": "^5.12.9",
+    "typescript": "^5.9.2"
+  }
+}
