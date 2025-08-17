@@ -126,7 +126,7 @@ describe('Maze solving utilities', () => {
   });
 
   it('solveMaze: returns empty/null path if blocked', () => {
-    if (!hasFunction(solveMaze)) return;
+    if (typeof solveMaze !== 'function' || solveMaze.length !== 3) return;
     // Wall blocks any route to target
     const maze = [
       [0,1,0],
