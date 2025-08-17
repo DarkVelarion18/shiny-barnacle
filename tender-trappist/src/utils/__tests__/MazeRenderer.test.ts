@@ -18,10 +18,10 @@ describe('MazeRenderer module - smoke and resilience', () => {
 
   it('exposes at least one function or constructible export', async () => {
     const mod: any = await import('../MazeRenderer');
-    const candidates = ['render', 'renderMaze', 'draw', 'toString', 'renderToCanvas', 'MazeRenderer', 'default'];
+    const candidates = ['render', 'renderMaze', 'draw', 'renderToCanvas', 'MazeRenderer', 'default'];
     const found = candidates
       .map((k) => [k, mod[k]] as const)
-      .find(([, v]) => typeof v === 'function');
+      .find(([k, v]) => Object.prototype.hasOwnProperty.call(mod, k) && typeof v === 'function');
     expect(found).toBeTruthy();
   });
 
