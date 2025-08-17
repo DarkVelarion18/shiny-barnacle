@@ -27,10 +27,10 @@ describe('MazeRenderer module - smoke and resilience', () => {
 
   it('handles clearly invalid inputs gracefully when a render-like function exists', async () => {
     const mod: any = await import('../MazeRenderer');
-    const candidates = ['render', 'renderMaze', 'draw', 'renderToCanvas', 'toString', 'default'];
+    const candidates = ['render', 'renderMaze', 'draw', 'renderToCanvas', 'default'];
     const entry = candidates
       .map((k) => [k, mod[k]] as const)
-      .find(([, v]) => typeof v === 'function');
+      .find(([k, v]) => Object.prototype.hasOwnProperty.call(mod, k) && typeof v === 'function');
 
     if (!entry) {
       // No callable export to test; treat as not applicable for now.
