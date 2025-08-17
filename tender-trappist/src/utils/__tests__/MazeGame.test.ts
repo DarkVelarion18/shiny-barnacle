@@ -19,12 +19,6 @@
 const hasFunction = (fn: any): fn is Function => typeof fn === 'function';
 const hasClass = (cls: any): boolean => typeof cls === 'function' && /^\s*class\s/.test(Function.prototype.toString.call(cls));
 
-const hasFunction = (fn: any): fn is Function =>
-  typeof fn === 'function';
-const hasClass = (cls: any): boolean =>
-  typeof cls === 'function' &&
-  /^\s*class\s/.test(Function.prototype.toString.call(cls));
-
 // Bind potential globals to avoid ReferenceError in environments without explicit imports.
 // If your API is module-based, prefer importing from the correct module instead.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
