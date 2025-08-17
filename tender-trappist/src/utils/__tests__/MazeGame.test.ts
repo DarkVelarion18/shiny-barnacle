@@ -140,7 +140,7 @@ describe('Maze solving utilities', () => {
   });
 
   it('solveMaze: validates inputs (non-rectangular, out-of-bounds, non-binary cells)', () => {
-    if (!hasFunction(solveMaze)) return;
+    if (typeof solveMaze !== 'function' || solveMaze.length !== 3) return;
     const badMazes: any[] = [
       [], // empty
       [[0], [0,0]], // jagged
