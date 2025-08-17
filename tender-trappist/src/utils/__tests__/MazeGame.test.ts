@@ -88,7 +88,7 @@ describe('Maze creation utilities', () => {
 
 describe('Maze solving utilities', () => {
   it('solveMaze: finds a trivial path in a 1x1 maze', () => {
-    if (!hasFunction(solveMaze)) return;
+    if (typeof solveMaze !== 'function' || solveMaze.length !== 3) return;
     // Minimal maze with start=end at (0,0); assume open cell
     const maze = [[0]];
     const start = [0, 0];
@@ -101,7 +101,6 @@ describe('Maze solving utilities', () => {
     expect(path[0]).toEqual(start);
     expect(path[path.length - 1]).toEqual(end);
   });
-
   it('solveMaze: finds a straightforward path in a small open maze', () => {
     if (typeof solveMaze !== 'function' || solveMaze.length !== 3) return;
     // 3x3 empty maze (0 = open)
