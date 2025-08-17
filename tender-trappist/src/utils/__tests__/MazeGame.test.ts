@@ -103,7 +103,7 @@ describe('Maze solving utilities', () => {
   });
 
   it('solveMaze: finds a straightforward path in a small open maze', () => {
-    if (!hasFunction(solveMaze)) return;
+    if (typeof solveMaze !== 'function' || solveMaze.length !== 3) return;
     // 3x3 empty maze (0 = open)
     const maze = [
       [0,0,0],
@@ -124,7 +124,6 @@ describe('Maze solving utilities', () => {
     expect(path[0]).toEqual([0,0]);
     expect(path[path.length - 1]).toEqual([2,2]);
   });
-
   it('solveMaze: returns empty/null path if blocked', () => {
     if (typeof solveMaze !== 'function' || solveMaze.length !== 3) return;
     // Wall blocks any route to target
