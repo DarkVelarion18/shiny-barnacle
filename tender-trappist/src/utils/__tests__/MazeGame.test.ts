@@ -19,6 +19,23 @@
 const hasFunction = (fn: any): fn is Function => typeof fn === 'function';
 const hasClass = (cls: any): boolean => typeof cls === 'function' && /^\s*class\s/.test(Function.prototype.toString.call(cls));
 
+const hasFunction = (fn: any): fn is Function =>
+  typeof fn === 'function';
+const hasClass = (cls: any): boolean =>
+  typeof cls === 'function' &&
+  /^\s*class\s/.test(Function.prototype.toString.call(cls));
+
+// Bind potential globals to avoid ReferenceError in environments without explicit imports.
+// If your API is module-based, prefer importing from the correct module instead.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const MazeGame: any = (globalThis as any).MazeGame;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const createMaze: any = (globalThis as any).createMaze;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const solveMaze: any = (globalThis as any).solveMaze;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const generateRandomMaze: any = (globalThis as any).generateRandomMaze;
+
 describe('MazeGame public API surface', () => {
   it('should expose either MazeGame class or functional utilities', () => {
     // We accept either class-based or function-based exports.
